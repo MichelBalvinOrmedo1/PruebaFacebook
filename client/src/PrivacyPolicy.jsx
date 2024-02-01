@@ -2,7 +2,7 @@
 import React from 'react';
 
 const PrivacyPolicy = () => {
-  const [data, setData] = useState([]);
+  
   return (
     <div>
       <h2>Política de Privacidad</h2>
