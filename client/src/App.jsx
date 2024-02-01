@@ -9,7 +9,7 @@ function App() {
   
   const handleFacebookLogin = response => {
     console.log('Respuesta de Facebook:', response);
-    // Aquí puedes manejar la respuesta de Facebook como desees
+    
   };
  
   return (
