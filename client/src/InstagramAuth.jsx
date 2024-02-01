@@ -31,6 +31,9 @@ const InstagramAuth = ({ onAuthorization }) => {
 
             // Ejecutar la función de retorno de llamada con el response
             onAuthorization(responseData);
+
+            // Indicar al usuario que cierre la ventana manualmente
+            alert('Proceso completado. Puedes cerrar esta ventana.');
           } else {
             console.error('Error al intercambiar el código por el token.');
           }
