@@ -31,9 +31,6 @@ const InstagramAuth = ({ onAuthorization }) => {
 
             // Ejecutar la función de retorno de llamada con el response
             onAuthorization(responseData);
-
-            // Indicar al usuario que cierre la ventana manualmente
-            alert('Proceso completado. Puedes cerrar esta ventana.');
           } else {
             console.error('Error al intercambiar el código por el token.');
           }
@@ -50,7 +47,16 @@ const InstagramAuth = ({ onAuthorization }) => {
   const handleAuthClick = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
 
-    window.location.href = authUrl;
+    // Abrir la ventana emergente
+    const authWindow = window.open(authUrl, '_blank', 'width=600,height=600');
+
+    // Verificar si la ventana emergente se cerró
+    const checkWindowClosed = setInterval(() => {
+      if (authWindow.closed) {
+        clearInterval(checkWindowClosed);
+        // La ventana emergente se cerró, ejecutar alguna lógica adicional si es necesario
+      }
+    }, 1000);
   };
 
   return (
