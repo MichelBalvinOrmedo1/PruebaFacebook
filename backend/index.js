@@ -42,7 +42,10 @@ app.get("/termsofservice", (req, res) => {
 });
 
 // Otras rutas específicas de tu aplicación React si las tienes
-
+app.get('*', (req, res) => {
+  // Responde con el contenido del archivo HTML principal de React
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 // Configuración CORS
 app.use(
   cors({
