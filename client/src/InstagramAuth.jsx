@@ -15,7 +15,7 @@ const InstagramAuth = () => {
 
   return (
     <div>
-      <h1>Instagram Authorization</h1>
+      <h1>Instagram Authorization s</h1>
       <button onClick={handleAuthClick}>Authorize with Instagram</button>
     </div>
   );
