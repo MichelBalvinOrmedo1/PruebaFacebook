@@ -22,7 +22,7 @@ const Home = () => {
                 <NavLink className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</NavLink>
             </li>
         </ul>
-        <FacebookLoginButton appId="881471950379451"  onLogin={handleFacebookLogin}/>
+        <FacebookLoginButton appId="347868938167045"  onLogin={handleFacebookLogin}/>
 
     </div>
   );
