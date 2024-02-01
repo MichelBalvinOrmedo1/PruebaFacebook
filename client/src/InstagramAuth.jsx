@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
@@ -29,27 +30,21 @@ const InstagramAuth = ({ onAuthorization }) => {
             clearInterval(checkWindowClosed);
             console.log('Código obtenido:', authCode);
 
-            // Realizar la solicitud al backend para obtener el token
-            fetch(`${URL}/getAccessToken`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  clientId,
-                  redirectUri,
-                  code: authCode,
-                }),
-                credentials: 'include', // Importante para enviar cookies y credenciales
-              })
-              .then(response => response.json())
-              .then(data => {
-                // Ejecutar la función de retorno de llamada con el response
-                onAuthorization(data);
-              })
-              .catch(error => {
-                console.error('Error al obtener el token:', error);
-              });
+            // Realizar la solicitud al backend para obtener el token con Axios
+            axios.post(`${URL}/getAccessToken`, {
+              clientId,
+              redirectUri,
+              code: authCode,
+            }, {
+              withCredentials: true,  // Habilitar el envío de cookies y credenciales
+            })
+            .then(response => {
+              // Ejecutar la función de retorno de llamada con el response
+              onAuthorization(response.data);
+            })
+            .catch(error => {
+              console.error('Error al obtener el token:', error);
+            });
 
             // Cerrar la ventana emergente después de obtener el código
             authWindow.close();
