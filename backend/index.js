@@ -17,6 +17,9 @@ import {
 } from "./config.js";
 
 const app = express();
+app.use(cors({ origin: 'https://pruebaapifacebook.onrender.com', credentials: true }));
+app.use(express.json());  // Agregado para analizar el cuerpo JSON de las solicitudes
+
 const pool = new pg.Pool({
   host: DB_HOST,
   database: DB_DATABASE,
@@ -25,28 +28,13 @@ const pool = new pg.Pool({
   port: DB_PORT,
 });
 
-// Configurar CORS
-app.use(cors({ origin: 'https://pruebaapifacebook.onrender.com', credentials: true }));
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://pruebaapifacebook.onrender.com');
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
 app.post('/getAccessToken', async (req, res) => {
   const { clientId, redirectUri, code } = req.body;
 
   try {
     const response = await axios.post('https://api.instagram.com/oauth/access_token', {
       client_id: clientId,
-      client_secret: '00a486c16ebc9243a199f671c0a7affe', // Reemplaza con tu client_secret
+      client_secret: '00a486c16ebc9243a199f671c0a7affe',
       grant_type: 'authorization_code',
       redirect_uri: redirectUri,
       code: code,
