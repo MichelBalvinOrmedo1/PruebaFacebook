@@ -2,6 +2,17 @@
 import React from 'react';
 
 const PrivacyPolicy = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Realizar una solicitud GET al endpoint del backend
+    fetch(`$https://michelface.onrender.com/privacypolicys`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => console.error("Error al obtener datos del backend:", error));
+  }, []);
   return (
     <div>
       <h2>Política de Privacidad</h2>
