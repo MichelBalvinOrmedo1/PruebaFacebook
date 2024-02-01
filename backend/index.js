@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import pg from "pg";
 
 import {
@@ -21,26 +22,22 @@ const pool = new pg.Pool({
   port: DB_PORT,
 });
 
-// Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Configuración de las rutas de tu aplicación React
-app.get("/privacypolicy", (req, res) => {
-  // Responder con el contenido de la ruta /privacypolicy de React
-  res.sendFile(path.join(__dirname, 'build', 'PrivacyPolicy.html'));
-});
-
-app.get("/termsofservice", (req, res) => {
-  // Responder con el contenido de la ruta /termsofservice de React
-  res.sendFile(path.join(__dirname, 'build', 'TermsOfService.html'));
-});
-
+// Configurar cors para permitir solicitudes desde FRONTEND_URL
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
   })
 );
+
+// Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Configuración de las rutas de tu aplicación React
+app.get("/*", (req, res) => {
+  // Responder con el contenido del archivo HTML principal de React
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
