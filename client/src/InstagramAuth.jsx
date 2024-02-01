@@ -9,65 +9,37 @@ const InstagramAuth = ({ onAuthorization }) => {
   const responseType = 'code';
 
   useEffect(() => {
-    const fetchTokenAndUserId = async (code) => {
-      try {
-        const response = await axios.post('https://api.instagram.com/oauth/access_token', {
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'authorization_code',
-          redirect_uri: redirectUri,
-          code: code,
-        });
-
-        const { access_token, user_id } = response.data;
-
-        // Almacenar el response en localStorage
-        localStorage.setItem('instagramAuthResponse', JSON.stringify({ access_token, user_id }));
-
-        // Cerrar la ventana emergente
+    const handleWindowMessage = (event) => {
+      // Verificar que el mensaje proviene de la ventana de Instagram
+      if (event.origin === 'https://api.instagram.com') {
+        const { access_token, user_id } = event.data;
+        
+        // Ejecutar la función de retorno de llamada con el response
+        onAuthorization({ access_token, user_id });
+        
+        // Opcional: Cerrar la ventana emergente después de recibir el response
         window.close();
-      } catch (error) {
-        console.error('Error al obtener el token:', error);
       }
     };
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    window.addEventListener('message', handleWindowMessage);
 
-    if (code) {
-      fetchTokenAndUserId(code);
-    }
-  }, [clientId, clientSecret, redirectUri]);
+    return () => {
+      window.removeEventListener('message', handleWindowMessage);
+    };
+  }, [onAuthorization]);
 
   const handleAuthClick = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
 
+    // Abrir la ventana emergente
     const authWindow = window.open(authUrl, '_blank', 'width=600,height=600');
 
-    // Verificar si la ventana principal está disponible
-    const checkMainWindow = setInterval(() => {
-      if (window.opener && !window.opener.closed) {
-        try {
-          // Obtener el response almacenado en localStorage
-          const storedResponse = localStorage.getItem('instagramAuthResponse');
-          if (storedResponse) {
-            const response = JSON.parse(storedResponse);
-
-            // Limpiar el localStorage
-            localStorage.removeItem('instagramAuthResponse');
-
-            // Ejecutar la función de retorno de llamada con el response
-            onAuthorization(response);
-
-            // Limpiar el intervalo
-            clearInterval(checkMainWindow);
-
-            // Cerrar la ventana emergente
-            authWindow.close();
-          }
-        } catch (error) {
-          console.error('Error al acceder al localStorage:', error);
-        }
+    // Verificar si la ventana emergente se cerró
+    const checkWindowClosed = setInterval(() => {
+      if (authWindow.closed) {
+        clearInterval(checkWindowClosed);
+        // La ventana emergente se cerró, ejecutar alguna lógica adicional si es necesario
       }
     }, 1000);
   };
