@@ -39,22 +39,12 @@ app.use(
 // Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Configuración de las rutas de tu aplicación React
-app.get("/privacypolicy", (req, res) => {
-  // Responder con el contenido del archivo HTML principal de React
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.get("/termsofservice", (req, res) => {
-  // Responder con el contenido del archivo HTML principal de React
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
 // Otras rutas específicas de tu aplicación React si las tienes
 app.get('*', (req, res) => {
   // Responde con el contenido del archivo HTML principal de React
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
+
 
 
 app.listen(PORT, () => {
