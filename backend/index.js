@@ -26,6 +26,15 @@ const pool = new pg.Pool({
   password: DB_PASSWORD,
   port: DB_PORT,
 });
+// Configuración CORS
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
 // Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -46,15 +55,7 @@ app.get('*', (req, res) => {
   // Responde con el contenido del archivo HTML principal de React
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
-// Configuración CORS
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
-    allowedHeaders: ["Content-Type"],
-  })
-);
+
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
