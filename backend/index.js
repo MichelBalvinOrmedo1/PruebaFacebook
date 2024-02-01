@@ -1,7 +1,12 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from 'url';
 import pg from "pg";
+
+// Obtener el directorio actual del archivo (equivalente a __dirname en CommonJS)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import {
   DB_DATABASE,
@@ -22,16 +27,6 @@ const pool = new pg.Pool({
   port: DB_PORT,
 });
 
-// Configurar cors para permitir solicitudes solo a las rutas específicas
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
-    allowedHeaders: ["Content-Type"],
-  })
-);
-
 // Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -46,10 +41,17 @@ app.get("/termsofservice", (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.get("/*", (req, res) => {
-  // Responder con el contenido del archivo HTML principal de React
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// Otras rutas específicas de tu aplicación React si las tienes
+
+// Configuración CORS
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
