@@ -3,8 +3,8 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from 'url';
 import pg from "pg";
+import axios from 'axios';
 
-// Obtener el directorio actual del archivo (equivalente a __dirname en CommonJS)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,22 +26,36 @@ const pool = new pg.Pool({
   password: DB_PASSWORD,
   port: DB_PORT,
 });
-// Configuración CORS
+
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
-    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
+    methods: "GET",
     allowedHeaders: ["Content-Type"],
   })
 );
 
-// Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
-app.use(express.static(path.join(__dirname, 'dist')));
 
-// Otras rutas específicas de tu aplicación React si las tienes
+app.post('/getAccessToken', async (req, res) => {
+  const { clientId, redirectUri, code } = req.body;
 
+  try {
+    const response = await axios.post('https://api.instagram.com/oauth/access_token', {
+      client_id: clientId,
+      client_secret: '00a486c16ebc9243a199f671c0a7affe', // Reemplaza con tu client_secret
+      grant_type: 'authorization_code',
+      redirect_uri: redirectUri,
+      code: code,
+    });
 
+    const responseData = response.data;
+    res.json(responseData);
+  } catch (error) {
+    console.error('Error al obtener el token:', error);
+    res.status(500).json({ error: 'Error al obtener el token' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
