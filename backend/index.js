@@ -27,12 +27,12 @@ app.use(express.static(path.join(__dirname, 'build')));
 // Configuración de las rutas de tu aplicación React
 app.get("/privacypolicy", (req, res) => {
   // Responder con el contenido de la ruta /privacypolicy de React
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'PrivacyPolicy.jsx'));
 });
 
 app.get("/termsofservice", (req, res) => {
   // Responder con el contenido de la ruta /termsofservice de React
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'TermsOfService.jsx'));
 });
 
 app.use(
