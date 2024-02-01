@@ -46,12 +46,9 @@ app.post('/getAccessToken', async (req, res) => {
     res.json(responseData);
   } catch (error) {
     console.error('Error al obtener el token:', error);
-
-    // Enviar un mensaje de error específico al cliente
     res.status(500).json({ error: 'Error al obtener el token', details: error.message });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
