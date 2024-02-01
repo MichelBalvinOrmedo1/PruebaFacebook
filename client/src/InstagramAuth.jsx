@@ -45,8 +45,35 @@ const InstagramAuth = () => {
   const handleAuthClick = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
 
+    // Abrir una nueva ventana emergente para la autorización
+    const authWindow = window.open(authUrl, '_blank', 'width=600,height=600');
+
+    // Escuchar cambios en la ubicación de la ventana emergente
+    const intervalId = setInterval(() => {
+      try {
+        // Verificar si la ubicación contiene el código de autorización
+        if (authWindow.location.href.includes(`${redirectUri}?code=`)) {
+          // Obtener el código de autorización de la nueva ventana
+          const code = new URLSearchParams(authWindow.location.search).get('code');
+
+          // Cerrar la ventana emergente
+          authWindow.close();
+
+          // Obtener el token y user_id utilizando el código
+          if (code) {
+            fetchTokenAndUserId(code);
+          }
+
+          // Limpiar el intervalo
+          clearInterval(intervalId);
+        }
+      } catch (error) {
+        // Capturar cualquier error que pueda ocurrir al acceder a la ubicación de la ventana emergente
+      }
+    }, 1000); // Verificar cada segundo
+
     // Redirigir al usuario a la URL de autorización de Instagram
-    window.location.href = authUrl;
+    // window.location.href = authUrl;  // Esto ya no es necesario
   };
 
   return (
