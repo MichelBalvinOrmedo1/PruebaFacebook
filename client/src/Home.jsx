@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FacebookLoginButton from "./FacebookLoginButton";
-import {Link, NavLink, Route,Routes} from 'react-router-dom'
+import {NavLink, Route,Routes} from 'react-router-dom'
 
 const Home = () => {
 
@@ -13,13 +13,13 @@ const Home = () => {
 
         <ul>
             <li>
-                <Link className={({isActive}) => isActive } to={'/'}> Home</Link>
+                <NavLink className={(data) => console.log(data)} to={'/'}> Home</NavLink>
             </li>
             <li>
-                <Link className={(data) => console.log(data)} to={'/privacypolicy'}> privacypolicy</Link>
+                <NavLink className={(data) => console.log(data)} to={'/privacypolicy'}> privacypolicy</NavLink>
             </li>
             <li>
-                <Link className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</Link>
+                <NavLink className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</NavLink>
             </li>
         </ul>
         <FacebookLoginButton appId="881471950379451"  onLogin={handleFacebookLogin}/>
