@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 const InstagramAuth = ({ onAuthorization }) => {
   const clientId = '751902293045624';
+  const clientSecret = '00a486c16ebc9243a199f671c0a7affe'; // Reemplaza con tu client_secret
   const redirectUri = 'https://pruebaapifacebook.onrender.com/';
   const scope = 'user_profile,user_media';
   const responseType = 'code';
@@ -19,7 +20,7 @@ const InstagramAuth = ({ onAuthorization }) => {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: `client_id=${clientId}&client_secret=${encodeURIComponent(
-              'tu-client-secret'
+              clientSecret
             )}&grant_type=authorization_code&redirect_uri=${encodeURIComponent(
               redirectUri
             )}&code=${code}`,
@@ -41,7 +42,7 @@ const InstagramAuth = ({ onAuthorization }) => {
 
     // Llamada a la función para manejar el código de autorización
     handleAuthCallback();
-  }, [clientId, redirectUri, onAuthorization]);
+  }, [clientId, clientSecret, redirectUri, onAuthorization]);
 
   const handleAuthClick = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
