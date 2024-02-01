@@ -23,9 +23,9 @@ const Home = () => {
                 <NavLink className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</NavLink>
             </li>
         </ul>
-        <FacebookLoginButton appId={881902980286107}  onLogin={handleFacebookLogin}/>
+        <FacebookLoginButton appId={741161537955952}  onLogin={handleFacebookLogin}/>
         <FacebookLogin
-            appId="881902980286107"
+            appId="741161537955952"
             onSuccess={(response) => {
                 console.log('Login Success!', response);
             }}
