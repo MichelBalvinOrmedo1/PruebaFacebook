@@ -31,16 +31,17 @@ const InstagramAuth = ({ onAuthorization }) => {
 
             // Realizar la solicitud al backend para obtener el token
             fetch(`${URL}/getAccessToken`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                clientId,
-                redirectUri,
-                code: authCode,
-              }),
-            })
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  clientId,
+                  redirectUri,
+                  code: authCode,
+                }),
+                credentials: 'include', // Importante para enviar cookies y credenciales
+              })
               .then(response => response.json())
               .then(data => {
                 // Ejecutar la función de retorno de llamada con el response
