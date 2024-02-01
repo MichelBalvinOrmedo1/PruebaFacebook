@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
-import PrivacyPolicy from "./PrivacyPolicy"
-import TermsOfService from "./TermsOfService"
-
-
-import {Route,Routes} from 'react-router-dom'
-import Home from "./Home";
+import PrivacyPolicy from "./PrivacyPolicy";
+import TermsOfService from "./TermsOfService";
+import {
+  FRONTEND_URL,
+} from "./config.js";
+import Home from "./Home.jsx";
+import {Routes, Route } from 'react-router-dom'
 function App() {
-  
-  const handleFacebookLogin = response => {
-    console.log('Respuesta de Facebook:', response);
-    
-  };
- 
-  return (
+  const [data, setData] = useState([]);
 
-    
+  useEffect(() => {
+    // Realizar una solicitud GET al endpoint del backend
+    fetch(`${FRONTEND_URL}/privacypolicys`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => console.error("Error al obtener datos del backend:", error));
+  }, []);
+
+  return (
     <div className="App">
       <Routes>
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/termsofservice" element={<TermsOfService />} />
-          <Route path="/" element={<Home />} ></Route>
-            
-        
+      <Route path="/" element={<Home />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/termsofservice" element={<TermsOfService />} />
       </Routes>
-      
-
     </div>
   );
 }
