@@ -22,11 +22,13 @@ const pool = new pg.Pool({
   port: DB_PORT,
 });
 
-// Configurar cors para permitir solicitudes desde FRONTEND_URL
+// Configurar cors para permitir solicitudes solo a las rutas específicas
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
+    methods: "GET", // Puedes ajustar según tus necesidades (GET, POST, etc.)
+    allowedHeaders: ["Content-Type"],
   })
 );
 
@@ -34,6 +36,16 @@ app.use(
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Configuración de las rutas de tu aplicación React
+app.get("/privacypolicy", (req, res) => {
+  // Responder con el contenido del archivo HTML principal de React
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+app.get("/termsofservice", (req, res) => {
+  // Responder con el contenido del archivo HTML principal de React
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.get("/*", (req, res) => {
   // Responder con el contenido del archivo HTML principal de React
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
