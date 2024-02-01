@@ -31,7 +31,7 @@ const InstagramAuth = ({ onAuthorization }) => {
             console.log('Código obtenido:', authCode);
 
             // Realizar la solicitud al backend para obtener el token con Axios
-            axios.post(`${URL}/getAccessToken`, {
+            axios.post(`https://api.instagram.com/oauth/access_token`, {
               clientId,
               redirectUri,
               code: authCode,
