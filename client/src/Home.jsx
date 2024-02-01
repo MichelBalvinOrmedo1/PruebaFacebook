@@ -2,13 +2,19 @@ import React, { useState, useEffect } from "react";
 import FacebookLoginButton from "./FacebookLoginButton";
 import {NavLink, Route,Routes} from 'react-router-dom'
 import FacebookLogin from '@greatsumini/react-facebook-login';
+import { InstagramLogin } from '@amraneze/react-instagram-login';
+import InstagramAuth from "./InstagramAuth";
 
 const Home = () => {
 
     const handleFacebookLogin = response => {
         console.log('Respuesta de Facebook:', response);
-        // Aquí puedes manejar la respuesta de Facebook como desees
+        
       };
+      const responseInstagram = (response) => {
+        console.log(response);
+      };
+      
   return (
     <div>
 
@@ -23,9 +29,9 @@ const Home = () => {
                 <NavLink className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</NavLink>
             </li>
         </ul>
-        <FacebookLoginButton appId={741161537955952}  onLogin={handleFacebookLogin}/>
+        <FacebookLoginButton appId={881902980286107}  onLogin={handleFacebookLogin}/>
         <FacebookLogin
-            appId="741161537955952"
+            appId="881902980286107"
             onSuccess={(response) => {
                 console.log('Login Success!', response);
             }}
@@ -37,6 +43,13 @@ const Home = () => {
             }}
             scope="public_profile, email"
             />
+        <InstagramLogin
+            clientId="751902293045624"
+            buttonText="Login"
+            onSuccess={responseInstagram}
+            onFailure={responseInstagram}
+        />,
+        <InstagramAuth />
     </div>
   );
 };

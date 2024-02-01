@@ -11,7 +11,7 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
           appId: appId,
           autoLogAppEvents: true,
           xfbml: true,
-          version: 'v9.0',
+          version: 'v9.0',         
         });
 
         window.FB.getLoginStatus(response => {
