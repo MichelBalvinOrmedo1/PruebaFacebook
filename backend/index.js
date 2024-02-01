@@ -28,7 +28,18 @@ const pool = new pg.Pool({
 // Configurar CORS
 app.use(cors({ origin: 'https://pruebaapifacebook.onrender.com', credentials: true }));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://pruebaapifacebook.onrender.com');
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
 
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
 app.post('/getAccessToken', async (req, res) => {
   const { clientId, redirectUri, code } = req.body;
 
