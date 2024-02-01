@@ -18,11 +18,14 @@ function App() {
     <div className="App">
       <Routes>
           
-          <Route path="/" element={<Home />} >
+          <Route path="/">
+            <Home />
          
           </Route>
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/termsofservice" element={<TermsOfService />} />
+          <Route path="/privacypolicy">
+            <PrivacyPolicy />
+          </Route>
+          <Route path="/termsofservice" Component={<TermsOfService />} />
         
       </Routes>
       
