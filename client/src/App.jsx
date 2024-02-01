@@ -1,27 +1,28 @@
-import { useState } from "react";
-import "./App.css";
+import React, { useState, useEffect } from "react";
+import PrivacyPolicy from "./PrivacyPolicy"
+import TermsOfService from "./TermsOfService"
 
-const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
+import {Route,Routes} from 'react-router-dom'
+import Home from "./Home";
 function App() {
-  const [result, setResult] = useState("");
-
+  
+  const handleFacebookLogin = response => {
+    console.log('Respuesta de Facebook:', response);
+    // Aquí puedes manejar la respuesta de Facebook como desees
+  };
+ 
   return (
+
+    
     <div className="App">
-      <h1>MERN Render</h1>
+      <Routes>
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/termsofservice" element={<TermsOfService />} />
+          <Route path="/" element={<Home />} />
+      </Routes>
+      
 
-      <button
-        onClick={async () => {
-          const res = await fetch(`${URL}/ping`);
-          const data = await res.json();
-          console.log(data);
-          setResult(data);
-        }}
-      >
-        Users
-      </button>
-
-      <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );
 }
