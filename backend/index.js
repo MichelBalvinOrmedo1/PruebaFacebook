@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import pg from "pg";
-import passport from 'passport';
-import FacebookTokenStrategy from 'passport-facebook-token';
 
 import {
   DB_DATABASE,
@@ -23,18 +21,19 @@ const pool = new pg.Pool({
   port: DB_PORT,
 });
 
-// Configura Passport para usar FacebookTokenStrategy
-passport.use(new FacebookTokenStrategy({
-  clientID: '881471950379451',
-  clientSecret: 'e5a147b2a21c41395fe022d086374165',
-}, (accessToken, refreshToken, profile, done) => {
-  // Aquí puedes hacer algo con la información del perfil del usuario
-  // Por ejemplo, puedes guardarlo en la base de datos
-  return done(null, profile);
-}));
+// Servir archivos estáticos desde la carpeta 'build' (resultado de la construcción de React)
+app.use(express.static(path.join(__dirname, 'build')));
 
-// Configura Express para usar Passport
-app.use(passport.initialize());
+// Configuración de las rutas de tu aplicación React
+app.get("/privacypolicy", (req, res) => {
+  // Responder con el contenido de la ruta /privacypolicy de React
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+app.get("/termsofservice", (req, res) => {
+  // Responder con el contenido de la ruta /termsofservice de React
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(
   cors({
@@ -42,23 +41,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.post('/auth/facebook/token',
-  passport.authenticate('facebook-token', { session: false }),
-  (req, res) => {
-    // Si la autenticación fue exitosa, puedes responder con la información del usuario
-    res.header('Access-Control-Allow-Credentials', 'true'); // Agrega este encabezado
-    res.json(req.user);
-  },
-  (err, req, res, next) => {
-    console.error('Error de autenticación de Facebook:', err);
-    res.status(401).json({ error: 'Unauthorized' });
-  }
-);
-  
-// ...
-
-
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
