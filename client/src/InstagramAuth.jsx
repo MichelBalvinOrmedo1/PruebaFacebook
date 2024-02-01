@@ -21,8 +21,11 @@ const InstagramAuth = ({ onAuthorization }) => {
 
         const { access_token, user_id } = response.data;
 
-        // Emitir el response a través de window.postMessage
-        window.opener.postMessage({ access_token, user_id }, redirectUri);
+        // Almacenar el response en localStorage
+        localStorage.setItem('instagramAuthResponse', JSON.stringify({ access_token, user_id }));
+
+        // Cerrar la ventana emergente
+        window.close();
       } catch (error) {
         console.error('Error al obtener el token:', error);
       }
@@ -41,18 +44,32 @@ const InstagramAuth = ({ onAuthorization }) => {
 
     const authWindow = window.open(authUrl, '_blank', 'width=600,height=600');
 
-    const receiveMessage = (event) => {
-      if (event.origin === redirectUri) {
-        // Manejar el message recibido desde la ventana emergente
-        onAuthorization(event.data);
+    // Verificar si la ventana principal está disponible
+    const checkMainWindow = setInterval(() => {
+      if (window.opener && !window.opener.closed) {
+        try {
+          // Obtener el response almacenado en localStorage
+          const storedResponse = localStorage.getItem('instagramAuthResponse');
+          if (storedResponse) {
+            const response = JSON.parse(storedResponse);
 
-        // Limpiar el event listener
-        window.removeEventListener('message', receiveMessage);
+            // Limpiar el localStorage
+            localStorage.removeItem('instagramAuthResponse');
+
+            // Ejecutar la función de retorno de llamada con el response
+            onAuthorization(response);
+
+            // Limpiar el intervalo
+            clearInterval(checkMainWindow);
+
+            // Cerrar la ventana emergente
+            authWindow.close();
+          }
+        } catch (error) {
+          console.error('Error al acceder al localStorage:', error);
+        }
       }
-    };
-
-    // Agregar un event listener para recibir mensajes
-    window.addEventListener('message', receiveMessage);
+    }, 1000);
   };
 
   return (
