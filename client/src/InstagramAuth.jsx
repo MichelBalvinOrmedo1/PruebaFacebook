@@ -21,8 +21,8 @@ const InstagramAuth = ({ onAuthorization }) => {
 
         const { access_token, user_id } = response.data;
 
-        // Emitir el response a través de la función de retorno de llamada
-        onAuthorization({ access_token, user_id });
+        // Emitir el response a través de window.postMessage
+        window.opener.postMessage({ access_token, user_id }, redirectUri);
       } catch (error) {
         console.error('Error al obtener el token:', error);
       }
@@ -34,30 +34,25 @@ const InstagramAuth = ({ onAuthorization }) => {
     if (code) {
       fetchTokenAndUserId(code);
     }
-  }, [clientId, clientSecret, redirectUri, onAuthorization]);
+  }, [clientId, clientSecret, redirectUri]);
 
   const handleAuthClick = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}`;
 
     const authWindow = window.open(authUrl, '_blank', 'width=600,height=600');
 
-    const intervalId = setInterval(() => {
-      try {
-        if (authWindow.location.href.includes(`${redirectUri}?code=`)) {
-          const code = new URLSearchParams(authWindow.location.search).get('code');
+    const receiveMessage = (event) => {
+      if (event.origin === redirectUri) {
+        // Manejar el message recibido desde la ventana emergente
+        onAuthorization(event.data);
 
-          authWindow.close();
-
-          if (code) {
-            fetchTokenAndUserId(code);
-          }
-
-          clearInterval(intervalId);
-        }
-      } catch (error) {
-        console.error('Error al acceder a la ubicación de la ventana emergente:', error);
+        // Limpiar el event listener
+        window.removeEventListener('message', receiveMessage);
       }
-    }, 1000);
+    };
+
+    // Agregar un event listener para recibir mensajes
+    window.addEventListener('message', receiveMessage);
   };
 
   return (
