@@ -11,10 +11,18 @@ const Home = () => {
         console.log('Respuesta de Facebook:', response);
         
       };
+      const [instagramResponse, setInstagramResponse] = useState(null);
+
+      const handleInstagramAuthorization = (response) => {
+        // Manejar el response de Instagram
+        console.log('Instagram Response:', response);
+        setInstagramResponse(response);
+      };
       const responseInstagram = (response) => {
         console.log(response);
       };
       
+
   return (
     <div>
 
@@ -49,7 +57,7 @@ const Home = () => {
             onSuccess={responseInstagram}
             onFailure={responseInstagram}
         />,
-        <InstagramAuth />
+      <InstagramAuth onAuthorization={handleInstagramAuthorization} />
     </div>
   );
 };
