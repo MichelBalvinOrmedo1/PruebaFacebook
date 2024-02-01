@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsOfService from "./TermsOfService";
-import {
-  FRONTEND_URL,
-} from "./config.js";
+
 import Home from "./Home.jsx";
 import {Routes, Route } from 'react-router-dom'
 function App() {
@@ -11,7 +9,7 @@ function App() {
 
   useEffect(() => {
     // Realizar una solicitud GET al endpoint del backend
-    fetch(`${FRONTEND_URL}/privacypolicys`)
+    fetch(`$https://michelface.onrender.com/privacypolicys`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
