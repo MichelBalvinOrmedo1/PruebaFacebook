@@ -34,7 +34,7 @@ const TermsOfService = () => {
         Nos reservamos el derecho de modificar estos términos en cualquier momento. Te notificaremos sobre cambios significativos en nuestros términos de servicio. Continuar utilizando nuestra plataforma después de dichos cambios constituye tu aceptación de los nuevos términos.
       </p>
 
-      <h3>6. Contacto</h3>
+      <h3>6. Contacto </h3>
       <p>
         Si tienes alguna pregunta sobre nuestros términos de servicio, no dudes en ponerte en contacto con nosotros Michel Balvin Ormedo.
       </p>
