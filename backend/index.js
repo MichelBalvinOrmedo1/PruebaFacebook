@@ -32,6 +32,10 @@ app.post('/getAccessToken', async (req, res) => {
   const { clientId, redirectUri, code } = req.body;
 
   try {
+    console.log('Received request with clientId:', clientId);
+    console.log('Received request with redirectUri:', redirectUri);
+    console.log('Received request with code:', code);
+
     const response = await axios.post('https://api.instagram.com/oauth/access_token', null, {
       params: {
         client_id: clientId,
@@ -43,12 +47,15 @@ app.post('/getAccessToken', async (req, res) => {
     });
 
     const responseData = response.data;
+    console.log('Instagram API response:', responseData);
+
     res.json(responseData);
   } catch (error) {
     console.error('Error al obtener el token:', error);
     res.status(500).json({ error: 'Error al obtener el token', details: error.message });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
