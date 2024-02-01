@@ -40,10 +40,6 @@ app.use(
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Otras rutas específicas de tu aplicación React si las tienes
-app.get('*', (req, res) => {
-  // Responde con el contenido del archivo HTML principal de React
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
 
 
 
