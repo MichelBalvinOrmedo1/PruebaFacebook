@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FacebookLoginButton from "./FacebookLoginButton";
 import {NavLink, Route,Routes} from 'react-router-dom'
+import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const Home = () => {
 
@@ -22,8 +23,20 @@ const Home = () => {
                 <NavLink className={(data) => console.log(data)} to={'/termsofservice'}> termsofservice</NavLink>
             </li>
         </ul>
-        <FacebookLoginButton appId="347868938167045"  onLogin={handleFacebookLogin}/>
-
+        <FacebookLoginButton appId={881902980286107}  onLogin={handleFacebookLogin}/>
+        <FacebookLogin
+            appId="881902980286107"
+            onSuccess={(response) => {
+                console.log('Login Success!', response);
+            }}
+            onFail={(error) => {
+                console.log('Login Failed!', error);
+            }}
+            onProfileSuccess={(response) => {
+                console.log('Get Profile Success!', response);
+            }}
+            scope="public_profile, email"
+            />
     </div>
   );
 };

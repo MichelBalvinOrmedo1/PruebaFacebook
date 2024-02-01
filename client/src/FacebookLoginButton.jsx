@@ -1,3 +1,4 @@
+// FacebookLoginButton.jsx
 import React, { useEffect, useState } from 'react';
 
 const FacebookLoginButton = ({ appId, onLogin }) => {
@@ -18,6 +19,15 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
             setIsLoggedIn(true);
           }
         });
+
+        window.FB.Event.subscribe('auth.statusChange', (response) => {
+          if (response.status === 'connected') {
+            setIsLoggedIn(true);
+            onLogin(response); // Envía la respuesta al componente principal
+          } else {
+            setIsLoggedIn(false);
+          }
+        });
       };
 
       (function (d, s, id) {
@@ -28,37 +38,22 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
         js.src = 'https://connect.facebook.net/en_US/sdk.js';
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
-
     };
 
     loadFacebookSDK();
-  }, [appId]);
+  }, [appId, onLogin]);
 
   const handleFacebookButtonClick = async () => {
     try {
-
-
       const response = await new Promise((resolve) => {
-        window.FB.getLoginStatus(resolve, true);
+        window.FB.login(resolve);
       });
 
       if (response.status === 'connected') {
         setIsLoggedIn(true);
         onLogin(response); // Envía la respuesta al componente principal
       } else {
-        await new Promise((resolve) => {
-          window.FB.login(resolve);
-        });
-        const newResponse = await new Promise((resolve) => {
-          window.FB.getLoginStatus(resolve, true);
-        });
-
-        if (newResponse.status === 'connected') {
-          setIsLoggedIn(true);
-          onLogin(newResponse); // Envía la respuesta al componente principal
-        } else {
-          setIsLoggedIn(false);
-        }
+        setIsLoggedIn(false);
       }
     } catch (error) {
       console.error('Error al autenticar con Facebook:', error);
@@ -75,6 +70,6 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
       )}
     </div>
   );
-}
+};
 
 export default FacebookLoginButton;
