@@ -18,13 +18,10 @@ function App() {
     <div className="App">
       <Routes>
           
-          <Route path="/">
-            <Home />
+          <Route path="/" Component={<Home />} />
          
-          </Route>
-          <Route path="/privacypolicy">
-            <PrivacyPolicy />
-          </Route>
+        
+           <Route path="/privacypolicy" Component={<PrivacyPolicy />} />
           <Route path="/termsofservice" Component={<TermsOfService />} />
         
       </Routes>
