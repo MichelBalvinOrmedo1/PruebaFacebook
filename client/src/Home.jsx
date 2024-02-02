@@ -45,7 +45,7 @@ const Home = () => {
             onSuccess={responseInstagram}
             onFailure={responseInstagram}
         />,
-      <InstagramAuth onAuthorization={handleInstagramAuthorization} btnText="Iniciar Session instagram"/>
+      <InstagramAuth clientId="751902293045624" onAuthorization={handleInstagramAuthorization} btnText="Iniciar Session instagram"/>
     </div>
   );
 };
