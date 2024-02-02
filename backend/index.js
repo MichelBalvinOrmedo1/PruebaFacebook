@@ -17,7 +17,13 @@ import {
 } from "./config.js";
 
 const app = express();
-app.use(cors({ origin: 'https://pruebaapifacebook.onrender.com', credentials: true }));
+
+// Configurar CORS
+app.use(cors({
+  origin: FRONTEND_URL, // Actualiza FRONTEND_URL con tu frontend en producción
+  credentials: true,
+}));
+
 app.use(express.json());  // Agregado para analizar el cuerpo JSON de las solicitudes
 
 const pool = new pg.Pool({
@@ -27,6 +33,9 @@ const pool = new pg.Pool({
   password: DB_PASSWORD,
   port: DB_PORT,
 });
+
+// Middleware para manejar las solicitudes OPTIONS
+app.options('*', cors());
 
 app.post('/getAccessToken', async (req, res) => {
   const { clientId, redirectUri, code } = req.body;
@@ -55,7 +64,6 @@ app.post('/getAccessToken', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el token', details: error.message });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en el puerto ${PORT}`);
