@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
@@ -19,49 +18,48 @@ const InstagramAuth = ({ onAuthorization }) => {
 
     // Verificar si la ventana se cerró
     const checkWindowClosed = setInterval(async () => {
-        if (authWindow.closed) {
-          clearInterval(checkWindowClosed);
-          console.log('Ventana cerrada');
-        } else {
-          try {
-            // Intentar acceder al código desde la ventana emergente
-            const authCode = authWindow.location.href.split('code=')[1];
-            if (authCode) {
-              clearInterval(checkWindowClosed);
-              console.log('Código obtenido:', authCode);
-    
-              // Realizar la solicitud al backend para obtener el token con Fetch y await
-              try {
-                const response = await fetch(`${URL}/getAccessToken`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    // Incluir el siguiente encabezado para enviar cookies y credenciales
-                    'Credentials': 'include',
-                  },
-                  body: JSON.stringify({
-                    clientId,
-                    redirectUri,
-                    code: authCode,
-                  }),
-                });
-    
-                const data = await response.json();
-    
-                // Ejecutar la función de retorno de llamada con el response
-                onAuthorization(data);
-              } catch (error) {
-                console.error('Error al obtener el token:', error);
-              }
-    
-              // Cerrar la ventana emergente después de obtener el código
-              authWindow.close();
+      if (authWindow.closed) {
+        clearInterval(checkWindowClosed);
+        console.log('Ventana cerrada');
+      } else {
+        try {
+          // Intentar acceder al código desde la ventana emergente
+          const authCode = authWindow.location.href.split('code=')[1];
+          if (authCode) {
+            clearInterval(checkWindowClosed);
+            console.log('Código obtenido:', authCode);
+
+            // Realizar la solicitud al backend para obtener el token con Fetch y await
+            try {
+              const response = await fetch(`${URL}/getAccessToken`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  clientId,
+                  redirectUri,
+                  code: authCode,
+                }),
+                credentials: 'include', // Incluir el siguiente encabezado para enviar cookies y credenciales
+              });
+
+              const data = await response.json();
+
+              // Ejecutar la función de retorno de llamada con el response
+              onAuthorization(data);
+            } catch (error) {
+              console.error('Error al obtener el token:', error);
             }
-          } catch (error) {
-            // Si hay un error al intentar acceder al código, seguir verificando
+
+            // Cerrar la ventana emergente después de obtener el código
+            authWindow.close();
           }
+        } catch (error) {
+          // Si hay un error al intentar acceder al código, seguir verificando
         }
-      }, 1000);
+      }
+    }, 1000);
   };
 
   return (
