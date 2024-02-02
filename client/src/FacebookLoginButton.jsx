@@ -11,7 +11,7 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
           appId: appId,
           autoLogAppEvents: true,
           xfbml: true,
-          version: 'v9.0',         
+          version: 'v9.0',
         });
 
         window.FB.getLoginStatus(response => {
@@ -46,7 +46,7 @@ const FacebookLoginButton = ({ appId, onLogin }) => {
   const handleFacebookButtonClick = async () => {
     try {
       const response = await new Promise((resolve) => {
-        window.FB.login(resolve);
+        window.FB.login(resolve, { scope: 'public_profile,email' }); // Aquí se especifica el scope
       });
 
       if (response.status === 'connected') {
