@@ -38,26 +38,14 @@ const Home = () => {
             </li>
         </ul>
         <FacebookLoginButton appId={881902980286107}  onLogin={handleFacebookLogin}/>
-        <FacebookLogin
-            appId="881902980286107"
-            onSuccess={(response) => {
-                console.log('Login Success!', response);
-            }}
-            onFail={(error) => {
-                console.log('Login Failed!', error);
-            }}
-            onProfileSuccess={(response) => {
-                console.log('Get Profile Success!', response);
-            }}
-            scope="public_profile, email"
-            />
+        
         <InstagramLogin
             clientId="751902293045624"
             buttonText="Login"
             onSuccess={responseInstagram}
             onFailure={responseInstagram}
         />,
-      <InstagramAuth onAuthorization={handleInstagramAuthorization} />
+      <InstagramAuth onAuthorization={handleInstagramAuthorization} btnText="Iniciar Session instagram"/>
     </div>
   );
 };
