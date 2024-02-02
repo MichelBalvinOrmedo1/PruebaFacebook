@@ -3,7 +3,6 @@ import React from 'react';
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
-  const clientId = clientId;
   const redirectUri = 'https://pruebaapifacebook.onrender.com/';
   const scope = 'user_profile,user_media';
   const responseType = 'code';
