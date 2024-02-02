@@ -1,8 +1,7 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
-const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
+const InstagramAuth = ({ clientId, onAuthorization, btnText }) => {
   const redirectUri = 'https://pruebaapifacebook.onrender.com/';
   const scope = 'user_profile,user_media';
   const responseType = 'code';
@@ -13,14 +12,22 @@ const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
       '_blank',
       'width=600,height=600'
     );
-  
+
     const checkWindowClosed = setInterval(() => {
       try {
         if (authWindow.closed) {
           clearInterval(checkWindowClosed);
           console.log('Ventana cerrada');
         } else {
-          const authCode = getAuthCodeFromUrl(authWindow.location.href);
+          let authCode = null;
+
+          try {
+            const href = authWindow.location.href;
+            authCode = getAuthCodeFromUrl(href);
+          } catch (error) {
+            // Manejar errores al intentar acceder a la propiedad href
+          }
+
           if (authCode) {
             clearInterval(checkWindowClosed);
             console.log('Código obtenido:', authCode);
@@ -33,12 +40,12 @@ const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
       }
     }, 1000);
   };
-  
+
   const getAuthCodeFromUrl = (url) => {
     const match = url.match(/code=([^&]*)/);
     return match && match[1];
   };
-  
+
   const obtainAccessToken = async (authCode) => {
     try {
       const response = await fetch(`${URL}/getAccessToken`, {
@@ -53,7 +60,7 @@ const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
         }),
         credentials: 'include',
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         onAuthorization(data);
@@ -64,8 +71,7 @@ const InstagramAuth = ({clientId, onAuthorization, btnText }) => {
       console.error('Error en la solicitud de token:', error);
     }
   };
-  
-    
+
   return (
     <> 
       <button onClick={handleAuthClick}>{btnText}</button>
