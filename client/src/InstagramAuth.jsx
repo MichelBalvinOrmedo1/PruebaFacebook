@@ -5,7 +5,7 @@ const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 const InstagramAuth = ({ onAuthorization, btnText }) => {
   const clientId = '751902293045624';
   const redirectUri = 'https://pruebaapifacebook.onrender.com/';
-  const scope = 'user_profile,user_media,instagram_graph_user_profile,instagram_graph_user_media';
+  const scope = 'user_profile,user_media';
   const responseType = 'code';
 
   const handleAuthClick = () => {
